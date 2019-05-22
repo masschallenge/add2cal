@@ -2,6 +2,7 @@ from datetime import datetime
 from urllib import parse
 from ics import Calendar, Event
 from ics import DisplayAlarm
+import hashlib
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
@@ -35,6 +36,17 @@ class Add2Cal():
         self.event_location = location
         self.event_description = description
         self.event_timezone = timezone
+        self.event_uid = self._get_uid([
+            start,
+            end,
+            self.event_timezone,
+            self.event_title,
+            self.event_location,
+            self.event_description])
+
+    def _get_uid(self, params):
+        param_hash = hashlib.md5(str(params).encode('utf-8'))
+        return param_hash.hexdigest()
 
     def google_calendar_url(self):
         dates = "%s/%s" % (
@@ -48,7 +60,7 @@ class Add2Cal():
             'details': self.event_description,
             'location': self.event_location,
             'pli': 1,
-            'uid': 'someuid',
+            'uid': self.event_uid,
             'sf': 'true',
             'output': 'xml',
             'followup': 'https://calendar.google.com/calendar/',
@@ -62,6 +74,7 @@ class Add2Cal():
             'v': 60,
             'view': 'd',
             'type': 20,
+            'uid': self.event_uid,
             'title': self.event_title,
             'st': self.start_datetime.strftime(DATE_FORMAT),
             'in_loc': self.event_location,
@@ -77,6 +90,7 @@ class Add2Cal():
             'startdt': self.start_datetime.strftime(DATE_FORMAT),
             'enddt': self.end_datetime.strftime(DATE_FORMAT),
             'subject': self.event_title,
+            'uid': self.event_uid,
             'location': self.event_location,
             'body': self.event_description,
             'allday': ''
