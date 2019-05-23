@@ -2,7 +2,10 @@
 
 # Copyright (c) 2019 MassChallenge, Inc.
 
-from setuptools import setup
+from setuptools import (
+    setup,
+    find_packages
+)
 
 
 with open('README.md') as f:
@@ -14,6 +17,7 @@ with open('LICENSE') as f:
 setup(
     name='add2cal',
     version='0.1.0',
+    packages=find_packages(),
     description='',
     long_description=readme,
     author='Shankar Ambady',
