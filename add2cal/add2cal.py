@@ -3,6 +3,7 @@ from urllib import parse
 from ics import Calendar, Event
 from ics import DisplayAlarm
 import hashlib
+from pytz import timezone
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
@@ -27,15 +28,15 @@ class Add2Cal():
         end,
         description,
         location,
-        timezone='America/New_York'
+        tz='America/New_York'
     ):
-
-        self.start_datetime = datetime.fromtimestamp(start)
-        self.end_datetime = datetime.fromtimestamp(end)
+        localtz = timezone(tz)
+        self.start_datetime = localtz.localize(datetime.fromtimestamp(start))
+        self.end_datetime = localtz.localize(datetime.fromtimestamp(end))
         self.event_title = title
         self.event_location = location
         self.event_description = description
-        self.event_timezone = timezone
+        self.event_timezone = tz
         self.event_uid = self._get_uid([
             start,
             end,
