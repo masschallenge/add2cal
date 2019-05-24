@@ -75,7 +75,7 @@ class Add2Cal():
             'v': 60,
             'view': 'd',
             'type': 20,
-            'uid': self.event_uid,
+            'uid': '',
             'title': self.event_title,
             'st': self.start_datetime.strftime(DATE_FORMAT),
             'in_loc': self.event_location,
