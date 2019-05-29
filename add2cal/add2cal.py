@@ -7,7 +7,7 @@ from pytz import timezone
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
-    'outlook': 'https://outlook.live.com/owa/',
+    'outlook': 'https://outlook.office.com/owa/',
     'yahoo': 'http://calendar.yahoo.com'
 }
 DATE_FORMAT = "%Y%m%dT%H%M%SZ"
@@ -87,7 +87,6 @@ class Add2Cal():
     def outlook_calendar_url(self):
         params = {
             'path': '/calendar/action/compose',
-            'rru': 'addevent',
             'startdt': self.start_datetime.strftime(DATE_FORMAT),
             'enddt': self.end_datetime.strftime(DATE_FORMAT),
             'subject': self.event_title,
