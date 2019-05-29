@@ -3,7 +3,7 @@ from urllib import parse
 from ics import Calendar, Event
 from ics import DisplayAlarm
 import hashlib
-from pytz import timezone
+
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
@@ -27,20 +27,16 @@ class Add2Cal():
         start,
         end,
         description,
-        location,
-        tz='America/New_York'
+        location
     ):
-        localtz = timezone(tz)
-        self.start_datetime = localtz.localize(datetime.fromtimestamp(start))
-        self.end_datetime = localtz.localize(datetime.fromtimestamp(end))
+        self.start_datetime = datetime.utcfromtimestamp(start)
+        self.end_datetime = datetime.utcfromtimestamp(end)
         self.event_title = title
         self.event_location = location
         self.event_description = description
-        self.event_timezone = tz
         self.event_uid = self._get_uid([
             start,
             end,
-            self.event_timezone,
             self.event_title,
             self.event_location,
             self.event_description])
@@ -57,7 +53,6 @@ class Add2Cal():
             'action': 'TEMPLATE',
             'text': self.event_title,
             'dates': dates,
-            'ctz': self.event_timezone,
             'details': self.event_description,
             'location': self.event_location,
             'pli': 1,
@@ -71,6 +66,13 @@ class Add2Cal():
         return _build_url(BASE_URLS['google'], params)
 
     def yahoo_calendar_url(self):
+        duration_datetime = self.end_datetime - self.start_datetime
+        duration_seconds = duration_datetime.seconds
+        duration_days = duration_datetime.days
+        duration_hours, remainder = divmod(duration_seconds, 3600)
+        duration_minutes, seconds = divmod(remainder, 60)
+        if duration_days > 0:
+            duration_hours += duration_days * 24
         params = {
             'v': 60,
             'view': 'd',
@@ -79,7 +81,7 @@ class Add2Cal():
             'title': self.event_title,
             'st': self.start_datetime.strftime(DATE_FORMAT),
             'in_loc': self.event_location,
-            'dur': 200,
+            'dur': '{:02d}{:02d}'.format(duration_hours, duration_minutes),
             'desc': self.event_description
         }
         return _build_url(BASE_URLS['yahoo'], params)
