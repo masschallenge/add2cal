@@ -1,8 +1,8 @@
-from datetime import datetime
 from urllib import parse
 from ics import Calendar, Event
 from ics import DisplayAlarm
 import hashlib
+import datetime
 
 
 BASE_URLS = {
@@ -29,8 +29,8 @@ class Add2Cal():
         description,
         location
     ):
-        self.start_datetime = datetime.utcfromtimestamp(start)
-        self.end_datetime = datetime.utcfromtimestamp(end)
+        self.start_datetime = start
+        self.end_datetime = end
         self.event_title = title
         self.event_location = location
         self.event_description = description
@@ -47,8 +47,8 @@ class Add2Cal():
 
     def google_calendar_url(self):
         dates = "%s/%s" % (
-            self.start_datetime.strftime(DATE_FORMAT),
-            self.end_datetime.strftime(DATE_FORMAT))
+            self.start_datetime,
+            self.end_datetime)
         params = {
             'action': 'TEMPLATE',
             'text': self.event_title,
@@ -66,7 +66,10 @@ class Add2Cal():
         return _build_url(BASE_URLS['google'], params)
 
     def yahoo_calendar_url(self):
-        duration_datetime = self.end_datetime - self.start_datetime
+        end = datetime.datetime.strptime(self.end_datetime, DATE_FORMAT)
+        start = datetime.datetime.strptime(self.start_datetime, DATE_FORMAT)
+
+        duration_datetime = end - start
         duration_seconds = duration_datetime.seconds
         duration_days = duration_datetime.days
         duration_hours, remainder = divmod(duration_seconds, 3600)
@@ -79,7 +82,7 @@ class Add2Cal():
             'type': 20,
             'uid': '',
             'title': self.event_title,
-            'st': self.start_datetime.strftime(DATE_FORMAT),
+            'st': start,
             'in_loc': self.event_location,
             'dur': '{:02d}{:02d}'.format(duration_hours, duration_minutes),
             'desc': self.event_description
@@ -89,8 +92,8 @@ class Add2Cal():
     def outlook_calendar_url(self):
         params = {
             'path': '/calendar/action/compose',
-            'startdt': self.start_datetime.strftime(DATE_FORMAT),
-            'enddt': self.end_datetime.strftime(DATE_FORMAT),
+            'startdt': self.start_datetime,
+            'enddt': self.end_datetime,
             'subject': self.event_title,
             'uid': self.event_uid,
             'location': self.event_location,
