@@ -82,7 +82,7 @@ class Add2Cal():
             'type': 20,
             'uid': '',
             'title': self.event_title,
-            'st': start,
+            'st': self.start_datetime,
             'in_loc': self.event_location,
             'dur': '{:02d}{:02d}'.format(duration_hours, duration_minutes),
             'desc': self.event_description
