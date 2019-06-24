@@ -10,7 +10,7 @@ BASE_URLS = {
     'outlook': 'https://outlook.office.com/owa/',
     'yahoo': 'http://calendar.yahoo.com'
 }
-DATE_FORMAT = "%Y%m%dT%H%M%SZ"
+DATE_FORMAT = "%Y%m%dT%H%M%S"
 
 
 def _build_url(baseurl, args_dict):
