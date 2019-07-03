@@ -3,6 +3,7 @@ from ics import Calendar, Event
 from ics import DisplayAlarm
 import hashlib
 import datetime
+import re
 
 
 BASE_URLS = {
@@ -110,7 +111,11 @@ class Add2Cal():
         e.begin = self.start_datetime
         e.end = self.end_datetime
         c.events.add(e)
-        return str(c)
+        ics_str = str(c)
+        ics_str = re.sub(r'DTSTAMP\:(\d+)T(\d+)Z', r'DTSTAMP:\1T\2', ics_str)
+        ics_str = re.sub(r'DTEND\:(\d+)T(\d+)Z', r'DTEND:\1T\2', ics_str)
+        ics_str = re.sub(r'DTSTART\:(\d+)T(\d+)Z', r'DTSTART:\1T\2', ics_str)
+        return ics_str
 
     def as_dict(self, *args, **kwargs):
         return {
