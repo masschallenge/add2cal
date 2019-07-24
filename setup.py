@@ -27,5 +27,5 @@ setup(
     package='add2cal',
     install_requires=[
         'urllib3',
-        'ics'
+        'ics==v0.4'
     ])
