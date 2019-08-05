@@ -96,8 +96,8 @@ class Add2Cal():
 
         params = {
             'path': '/calendar/action/compose',
-            'startdt': start.strftime('%Y-%m-%dT%H:%M'),
-            'enddt': end.strftime('%Y-%m-%dT%H:%M'),
+            'startdt': start.strftime('%Y%m%dT%I%M%S'),
+            'enddt': end.strftime('%Y%m%dT%I%M%S'),
             'subject': self.event_title,
             'uid': self.event_uid,
             'location': self.event_location,
