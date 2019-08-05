@@ -91,10 +91,13 @@ class Add2Cal():
         return _build_url(BASE_URLS['yahoo'], params)
 
     def outlook_calendar_url(self):
+        end = datetime.datetime.strptime(self.end_datetime, DATE_FORMAT)
+        start = datetime.datetime.strptime(self.start_datetime, DATE_FORMAT)
+
         params = {
             'path': '/calendar/action/compose',
-            'startdt': self.start_datetime,
-            'enddt': self.end_datetime,
+            'startdt': start.strftime('%Y-%m-%dT%H:%M'),
+            'enddt': end.strftime('%Y-%m-%dT%H:%M'),
             'subject': self.event_title,
             'uid': self.event_uid,
             'location': self.event_location,
@@ -106,7 +109,8 @@ class Add2Cal():
     def ical_content(self):
         c = Calendar()
         e = Event()
-        e.alarms = [DisplayAlarm(trigger=self.start_datetime)]
+        start = datetime.datetime.strptime(self.start_datetime, DATE_FORMAT)
+        e.alarms = [DisplayAlarm(trigger=start.strftime('%Y-%m-%dT%I:%M'))]
         e.name = self.event_title
         e.begin = self.start_datetime
         e.end = self.end_datetime
