@@ -28,19 +28,22 @@ class Add2Cal():
         start,
         end,
         description,
-        location
+        location,
+        timezone
     ):
         self.start_datetime = start
         self.end_datetime = end
         self.event_title = title
         self.event_location = location
+        self.timezone = timezone
         self.event_description = description
         self.event_uid = self._get_uid([
             start,
             end,
             self.event_title,
             self.event_location,
-            self.event_description])
+            self.event_description,
+            self.timezone])
 
     def _get_uid(self, params):
         param_hash = hashlib.md5(str(params).encode('utf-8'))
@@ -59,6 +62,7 @@ class Add2Cal():
             'pli': 1,
             'uid': self.event_uid,
             'sf': 'true',
+            'ctz': self.timezone,
             'output': 'xml',
             'followup': 'https://calendar.google.com/calendar/',
             'scc': 1,
@@ -117,8 +121,10 @@ class Add2Cal():
         c.events.add(e)
         ics_str = str(c)
         ics_str = re.sub(r'DTSTAMP\:(\d+)T(\d+)Z', r'DTSTAMP:\1T\2', ics_str)
-        ics_str = re.sub(r'DTEND\:(\d+)T(\d+)Z', r'DTEND:\1T\2', ics_str)
-        ics_str = re.sub(r'DTSTART\:(\d+)T(\d+)Z', r'DTSTART:\1T\2', ics_str)
+        ics_str = re.sub(r'DTEND\:(\d+)T(\d+)Z',
+                         r'DTEND;TZID=%s:\1T\2' % timezone, ics_str)
+        ics_str = re.sub(r'DTSTART\:(\d+)T(\d+)Z',
+                         r'DTSTART;TZID=%s:\1T\2' % timezone, ics_str)
         return ics_str
 
     def as_dict(self, *args, **kwargs):
