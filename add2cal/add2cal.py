@@ -122,9 +122,9 @@ class Add2Cal():
         ics_str = str(c)
         ics_str = re.sub(r'DTSTAMP\:(\d+)T(\d+)Z', r'DTSTAMP:\1T\2', ics_str)
         ics_str = re.sub(r'DTEND\:(\d+)T(\d+)Z',
-                         r'DTEND;TZID=%s:\1T\2' % timezone, ics_str)
+                         r'DTEND;TZID=%s:\1T\2' % self.timezone, ics_str)
         ics_str = re.sub(r'DTSTART\:(\d+)T(\d+)Z',
-                         r'DTSTART;TZID=%s:\1T\2' % timezone, ics_str)
+                         r'DTSTART;TZID=%s:\1T\2' % self.timezone, ics_str)
         return ics_str
 
     def as_dict(self, *args, **kwargs):
