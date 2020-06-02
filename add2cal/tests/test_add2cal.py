@@ -14,12 +14,14 @@ class TestAdd2Cal(unittest.TestCase):
         title = 'test event'
         description = 'this is an exciting event'
         location = 'narnia'
+        timezone = 'America/New_York'
         self.add2cal = Add2Cal(
             start=start,
             end=end,
             title=title,
             description=description,
-            location=location)
+            location=location,
+            timezone=timezone)
 
     def test_outlook(self):
         outlook_url = self.add2cal.outlook_calendar_url()
