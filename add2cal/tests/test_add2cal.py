@@ -3,11 +3,7 @@ import arrow
 from add2cal import Add2Cal
 from datetime import datetime
 from urllib import parse
-
-from pytz import (
-    timezone,
-    utc,
-)
+from pytz import timezone
 
 DATE_FORMAT = "%Y%m%dT%H%M%S"
 
