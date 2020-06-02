@@ -37,6 +37,8 @@ class Add2Cal():
         self.event_location = location
         self.timezone = timezone
         self.event_description = description
+        self.trigger_datetime = datetime.datetime.strptime(
+            start, DATE_FORMAT).strftime('%Y-%m-%dT%I:%M')
         self.event_uid = self._get_uid([
             start,
             end,
@@ -113,8 +115,7 @@ class Add2Cal():
     def ical_content(self):
         c = Calendar()
         e = Event()
-        start = datetime.datetime.strptime(self.start_datetime, DATE_FORMAT)
-        e.alarms = [DisplayAlarm(trigger=start.strftime('%Y-%m-%dT%I:%M'))]
+        e.alarms = [DisplayAlarm(trigger=self.trigger_datetime)]
         e.name = self.event_title
         e.begin = self.start_datetime
         e.end = self.end_datetime
