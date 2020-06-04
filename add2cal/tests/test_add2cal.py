@@ -1,9 +1,13 @@
 import unittest
+import arrow
 from add2cal import Add2Cal
 from datetime import datetime
 from urllib import parse
+from pytz import timezone
 
 DATE_FORMAT = "%Y%m%dT%H%M%S"
+
+EXPECTED_CONTENT = "BEGIN:VCALENDAR"
 
 
 class TestAdd2Cal(unittest.TestCase):
@@ -14,12 +18,14 @@ class TestAdd2Cal(unittest.TestCase):
         title = 'test event'
         description = 'this is an exciting event'
         location = 'narnia'
+        self.timezone = 'America/New_York'
         self.add2cal = Add2Cal(
             start=start,
             end=end,
             title=title,
             description=description,
-            location=location)
+            location=location,
+            timezone=self.timezone)
 
     def test_outlook(self):
         outlook_url = self.add2cal.outlook_calendar_url()
@@ -40,4 +46,17 @@ class TestAdd2Cal(unittest.TestCase):
         self.assertEqual(
             parse.urlparse(outlook_url).netloc,
             'calendar.yahoo.com'
+        )
+
+    def test_ical_content(self):
+        self.maxDiff = None
+        self.add2cal.start_datetime = arrow.get(datetime.now())
+        self.add2cal.end_datetime = arrow.get(datetime.now())
+        tz = timezone(self.timezone)
+        start = datetime.now().astimezone(tz).strftime(DATE_FORMAT)
+        self.add2cal.trigger_datetime = datetime.strptime(start, DATE_FORMAT)
+        content = self.add2cal.ical_content()
+        self.assertIn(
+            EXPECTED_CONTENT,
+            content
         )
