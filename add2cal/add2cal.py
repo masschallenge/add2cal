@@ -117,6 +117,7 @@ class Add2Cal():
         e = Event()
         e.alarms = [DisplayAlarm(trigger=self.trigger_datetime)]
         e.name = self.event_title
+        e.description = self.event_description
         e.begin = self.start_datetime
         e.end = self.end_datetime
         c.events.add(e)
