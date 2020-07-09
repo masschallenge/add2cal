@@ -9,6 +9,7 @@ DATE_FORMAT = "%Y%m%dT%H%M%S"
 
 EXPECTED_CONTENT = "BEGIN:VCALENDAR"
 DESCRIPTION_CONTENT = 'DESCRIPTION:this is an exciting event'
+LOCATION_CONTENT = 'LOCATION:narnia'
 
 
 class TestAdd2Cal(unittest.TestCase):
@@ -62,7 +63,7 @@ class TestAdd2Cal(unittest.TestCase):
             content
         )
 
-    def test_ical_content_contains_description(self):
+    def test_ical_content_contains_description_and_location(self):
         self.maxDiff = None
         self.add2cal.start_datetime = arrow.get(datetime.now())
         self.add2cal.end_datetime = arrow.get(datetime.now())
@@ -70,7 +71,6 @@ class TestAdd2Cal(unittest.TestCase):
         start = datetime.now().astimezone(tz).strftime(DATE_FORMAT)
         self.add2cal.trigger_datetime = datetime.strptime(start, DATE_FORMAT)
         content = self.add2cal.ical_content()
-        self.assertIn(
-            DESCRIPTION_CONTENT,
-            content
-        )
+        for elem in [LOCATION_CONTENT, DESCRIPTION_CONTENT]:
+            self.assertIn(elem, content)
+
