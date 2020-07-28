@@ -68,7 +68,7 @@ class Add2Cal():
             'uid': self.event_uid,
             'sf': 'true',
             'ctz': self.timezone,
-            'add': self.attendee_email
+            'add': self.attendee_email,
             'output': 'xml',
             'followup': 'https://calendar.google.com/calendar/',
             'scc': 1,
@@ -110,7 +110,7 @@ class Add2Cal():
             'enddt': end.strftime('%Y%m%dT%I%M%S'),
             'subject': self.event_title,
             'uid': self.event_uid,
-            'cc': self.attendee_email
+            'cc': self.attendee_email,
             'location': self.event_location,
             'body': self.event_description,
             'allday': ''
@@ -121,9 +121,9 @@ class Add2Cal():
         c = Calendar()
         e = Event()
         e.alarms = [DisplayAlarm(trigger=self.trigger_datetime)]
-        e.attendees = [Attendee(rsvp=False, role="REQ-PARTICIPANT",
+        e.attendees = [Attendee(rsvp="FALSE", role="REQ-PARTICIPANT",
                                 partstat="ACCEPTED", cutype="INDIVIDUAL",
-                                mail=self.attendee_email,
+                                email=self.attendee_email,
                                 common_name=self.attendee_name)]
         e.name = self.event_title
         e.description = self.event_description
