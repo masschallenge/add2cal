@@ -1,9 +1,14 @@
-from urllib import parse
-from ics import Calendar, Event
-from ics import DisplayAlarm, Attendee
 import hashlib
 import datetime
 import re
+
+from urllib import parse
+from ics import (
+    Calendar,
+    Event,
+    DisplayAlarm,
+    Attendee,
+)
 
 
 BASE_URLS = {
@@ -121,10 +126,11 @@ class Add2Cal():
         c = Calendar()
         e = Event()
         e.alarms = [DisplayAlarm(trigger=self.trigger_datetime)]
-        e.attendees = [Attendee(rsvp="FALSE", role="REQ-PARTICIPANT",
-                                partstat="ACCEPTED", cutype="INDIVIDUAL",
-                                email=self.attendee_email,
-                                common_name=self.attendee_name)]
+        if self.attendee_email:
+            e.add_attendee(Attendee(rsvp="FALSE", role="REQ-PARTICIPANT",
+                                    partstat="ACCEPTED", cutype="INDIVIDUAL",
+                                    email=self.attendee_email,
+                                    common_name=self.attendee_name))
         e.name = self.event_title
         e.description = self.event_description
         e.location = self.event_location
