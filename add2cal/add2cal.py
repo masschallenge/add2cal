@@ -35,7 +35,7 @@ class Add2Cal():
         description,
         location,
         timezone,
-        attendee
+        attendee=None
     ):
         self.start_datetime = start
         self.end_datetime = end
@@ -43,8 +43,8 @@ class Add2Cal():
         self.event_location = location
         self.timezone = timezone
         self.event_description = description
-        self.attendee_name = attendee[0] if attendee else None
-        self.attendee_email = attendee[1] if attendee else None
+        self.attendee_name = attendee[0] if attendee else ""
+        self.attendee_email = attendee[1] if attendee else ""
         self.trigger_datetime = datetime.datetime.strptime(
             start, DATE_FORMAT).strftime('%Y-%m-%dT%I:%M')
         self.event_uid = self._get_uid([
