@@ -10,6 +10,7 @@ DATE_FORMAT = "%Y%m%dT%H%M%S"
 EXPECTED_CONTENT = "BEGIN:VCALENDAR"
 DESCRIPTION_CONTENT = 'DESCRIPTION:this is an exciting event'
 LOCATION_CONTENT = 'LOCATION:narnia'
+ATTENDEE_CONTENT = "ATTENDEE;CN=test attendee;"
 
 
 class TestAdd2Cal(unittest.TestCase):
@@ -27,7 +28,15 @@ class TestAdd2Cal(unittest.TestCase):
             title=title,
             description=description,
             location=location,
-            timezone=self.timezone)
+            timezone=self.timezone,
+            attendee=('test attendee', 'test@example.com'))
+        tz = timezone(self.timezone)
+        start = datetime.now().astimezone(tz).strftime(DATE_FORMAT)
+        self.add2cal.trigger_datetime = datetime.strptime(start, DATE_FORMAT)
+
+    def set_arrow_time(self):
+        self.add2cal.start_datetime = arrow.get(datetime.now())
+        self.add2cal.end_datetime = arrow.get(datetime.now())
 
     def test_outlook(self):
         outlook_url = self.add2cal.outlook_calendar_url()
@@ -51,12 +60,7 @@ class TestAdd2Cal(unittest.TestCase):
         )
 
     def test_ical_content(self):
-        self.maxDiff = None
-        self.add2cal.start_datetime = arrow.get(datetime.now())
-        self.add2cal.end_datetime = arrow.get(datetime.now())
-        tz = timezone(self.timezone)
-        start = datetime.now().astimezone(tz).strftime(DATE_FORMAT)
-        self.add2cal.trigger_datetime = datetime.strptime(start, DATE_FORMAT)
+        self.set_arrow_time()
         content = self.add2cal.ical_content()
         self.assertIn(
             EXPECTED_CONTENT,
@@ -64,13 +68,12 @@ class TestAdd2Cal(unittest.TestCase):
         )
 
     def test_ical_content_contains_description_and_location(self):
-        self.maxDiff = None
-        self.add2cal.start_datetime = arrow.get(datetime.now())
-        self.add2cal.end_datetime = arrow.get(datetime.now())
-        tz = timezone(self.timezone)
-        start = datetime.now().astimezone(tz).strftime(DATE_FORMAT)
-        self.add2cal.trigger_datetime = datetime.strptime(start, DATE_FORMAT)
+        self.set_arrow_time()
         content = self.add2cal.ical_content()
         for elem in [LOCATION_CONTENT, DESCRIPTION_CONTENT]:
             self.assertIn(elem, content)
 
+    def test_ical_content_contains_attendees(self):
+        self.set_arrow_time()
+        content = self.add2cal.ical_content()
+        self.assertIn(ATTENDEE_CONTENT, content)

@@ -1,9 +1,14 @@
-from urllib import parse
-from ics import Calendar, Event
-from ics import DisplayAlarm
 import hashlib
 import datetime
 import re
+
+from urllib import parse
+from ics import (
+    Calendar,
+    Event,
+    DisplayAlarm,
+    Attendee,
+)
 
 
 BASE_URLS = {
@@ -29,7 +34,8 @@ class Add2Cal():
         end,
         description,
         location,
-        timezone
+        timezone,
+        attendee=None
     ):
         self.start_datetime = start
         self.end_datetime = end
@@ -37,6 +43,8 @@ class Add2Cal():
         self.event_location = location
         self.timezone = timezone
         self.event_description = description
+        self.attendee_name = attendee[0] if attendee else ""
+        self.attendee_email = attendee[1] if attendee else ""
         self.trigger_datetime = datetime.datetime.strptime(
             start, DATE_FORMAT).strftime('%Y-%m-%dT%I:%M')
         self.event_uid = self._get_uid([
@@ -65,6 +73,7 @@ class Add2Cal():
             'uid': self.event_uid,
             'sf': 'true',
             'ctz': self.timezone,
+            'add': self.attendee_email,
             'output': 'xml',
             'followup': 'https://calendar.google.com/calendar/',
             'scc': 1,
@@ -106,6 +115,7 @@ class Add2Cal():
             'enddt': end.strftime('%Y%m%dT%I%M%S'),
             'subject': self.event_title,
             'uid': self.event_uid,
+            'cc': self.attendee_email,
             'location': self.event_location,
             'body': self.event_description,
             'allday': ''
@@ -116,6 +126,11 @@ class Add2Cal():
         c = Calendar()
         e = Event()
         e.alarms = [DisplayAlarm(trigger=self.trigger_datetime)]
+        if self.attendee_email:
+            e.add_attendee(Attendee(rsvp="FALSE", role="REQ-PARTICIPANT",
+                                    partstat="ACCEPTED", cutype="INDIVIDUAL",
+                                    email=self.attendee_email,
+                                    common_name=self.attendee_name))
         e.name = self.event_title
         e.description = self.event_description
         e.location = self.event_location
