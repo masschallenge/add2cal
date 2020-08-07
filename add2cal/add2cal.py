@@ -1,9 +1,12 @@
-from urllib import parse
-from ics import Calendar, Event
-from ics import DisplayAlarm
-import hashlib
-import datetime
+from datetime import datetime
+from hashlib import md5
+from ics import (
+    Calendar,
+    DisplayAlarm,    
+    Event,
+)
 import re
+from urllib import parse
 
 
 BASE_URLS = {
@@ -11,8 +14,10 @@ BASE_URLS = {
     'outlook': 'https://outlook.office.com/owa/',
     'yahoo': 'http://calendar.yahoo.com'
 }
-DATE_FORMAT = "%Y%m%dT%H%M%S"
 
+INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
+OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
+TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
 def _build_url(baseurl, args_dict):
     url_parts = list(parse.urlparse(baseurl))
@@ -37,8 +42,8 @@ class Add2Cal():
         self.event_location = location
         self.timezone = timezone
         self.event_description = description
-        self.trigger_datetime = datetime.datetime.strptime(
-            start, DATE_FORMAT).strftime('%Y-%m-%dT%I:%M')
+        self.trigger_datetime = datetime.strptime(
+            start, INPUT_DATE_FORMAT).strftime(TRIGGER_DATE_FORMAT)
         self.event_uid = self._get_uid([
             start,
             end,
@@ -48,7 +53,7 @@ class Add2Cal():
             self.timezone])
 
     def _get_uid(self, params):
-        param_hash = hashlib.md5(str(params).encode('utf-8'))
+        param_hash = md5(str(params).encode('utf-8'))
         return param_hash.hexdigest()
 
     def google_calendar_url(self):
@@ -73,8 +78,8 @@ class Add2Cal():
         return _build_url(BASE_URLS['google'], params)
 
     def yahoo_calendar_url(self):
-        end = datetime.datetime.strptime(self.end_datetime, DATE_FORMAT)
-        start = datetime.datetime.strptime(self.start_datetime, DATE_FORMAT)
+        end = datetime.strptime(self.end_datetime, INPUT_DATE_FORMAT)
+        start = datetime.strptime(self.start_datetime, INPUT_DATE_FORMAT)
 
         duration_datetime = end - start
         duration_seconds = duration_datetime.seconds
@@ -97,13 +102,13 @@ class Add2Cal():
         return _build_url(BASE_URLS['yahoo'], params)
 
     def outlook_calendar_url(self):
-        end = datetime.datetime.strptime(self.end_datetime, DATE_FORMAT)
-        start = datetime.datetime.strptime(self.start_datetime, DATE_FORMAT)
+        end = datetime.strptime(self.end_datetime, INPUT_DATE_FORMAT)
+        start = datetime.strptime(self.start_datetime, INPUT_DATE_FORMAT)
 
         params = {
             'path': '/calendar/action/compose',
-            'startdt': start.strftime('%Y%m%dT%I%M%S'),
-            'enddt': end.strftime('%Y%m%dT%I%M%S'),
+            'startdt': start.strftime(OUTLOOK_DATE_FORMAT),
+            'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
             'uid': self.event_uid,
             'location': self.event_location,
