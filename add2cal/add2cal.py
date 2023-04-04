@@ -95,6 +95,7 @@ class Add2Cal():
             'uid': '',
             'title': self.event_title,
             'st': self.start_datetime,
+            'ctz': self.timezone,
             'in_loc': self.event_location,
             'dur': '{:02d}{:02d}'.format(duration_hours, duration_minutes),
             'desc': self.event_description
@@ -111,6 +112,7 @@ class Add2Cal():
             'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
             'uid': self.event_uid,
+            'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
             'allday': ''
