@@ -19,6 +19,7 @@ INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
 OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
+
 def _build_url(baseurl, args_dict):
     url_parts = list(parse.urlparse(baseurl))
     url_parts[4] = parse.urlencode(args_dict)
@@ -141,6 +142,7 @@ class Add2Cal():
     def as_dict(self, *args, **kwargs):
         return {
             # 'outlook_link': self.outlook_calendar_url(),
+            'outlook_link': '',
             'gcal_link': self.google_calendar_url(),
             'yahoo_link': self.yahoo_calendar_url(),
             'ical_content': self.ical_content()
