@@ -2,7 +2,7 @@ from datetime import datetime
 from hashlib import md5
 from ics import (
     Calendar,
-    DisplayAlarm,    
+    DisplayAlarm,   
     Event,
 )
 import re
@@ -18,6 +18,7 @@ BASE_URLS = {
 INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
 OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
+
 
 def _build_url(baseurl, args_dict):
     url_parts = list(parse.urlparse(baseurl))
@@ -95,6 +96,7 @@ class Add2Cal():
             'uid': '',
             'title': self.event_title,
             'st': self.start_datetime,
+            'ctz': self.timezone,
             'in_loc': self.event_location,
             'dur': '{:02d}{:02d}'.format(duration_hours, duration_minutes),
             'desc': self.event_description
@@ -111,6 +113,7 @@ class Add2Cal():
             'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
             'uid': self.event_uid,
+            'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
             'allday': ''
@@ -128,7 +131,8 @@ class Add2Cal():
         e.end = self.end_datetime
         c.events.add(e)
         ics_str = str(c)
-        ics_str = re.sub(r'DTSTAMP\:(\d+)T(\d+)Z', r'DTSTAMP:\1T\2', ics_str)
+        ics_str = re.sub(r'DTSTAMP\:(\d+)T(\d+)Z',
+                         r'DTSTAMP:\1T\2' % self.timezone, ics_str)
         ics_str = re.sub(r'DTEND\:(\d+)T(\d+)Z',
                          r'DTEND;TZID=%s:\1T\2' % self.timezone, ics_str)
         ics_str = re.sub(r'DTSTART\:(\d+)T(\d+)Z',
@@ -137,7 +141,8 @@ class Add2Cal():
 
     def as_dict(self, *args, **kwargs):
         return {
-            'outlook_link': self.outlook_calendar_url(),
+            # 'outlook_link': self.outlook_calendar_url(),
+            'outlook_link': '',
             'gcal_link': self.google_calendar_url(),
             'yahoo_link': self.yahoo_calendar_url(),
             'ical_content': self.ical_content()
