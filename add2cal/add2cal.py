@@ -138,7 +138,6 @@ class Add2Cal():
 
     def as_dict(self, *args, **kwargs):
         return {
-            'outlook_link': '',
             'gcal_link': self.google_calendar_url(),
             'yahoo_link': self.yahoo_calendar_url(),
             'ical_content': self.ical_content()
