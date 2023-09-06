@@ -22,7 +22,8 @@ setup(
     long_description=readme,
     author='Shankar Ambady',
     author_email='shankar@masschallenge.org',
-    url='https://github.com/masschallenge/add2cal',
+    url='https://github.com/masschallenge/add2cal/tree/AC-10072',
+    # url='https://github.com/masschallenge/add2cal',
     license=license,
     package='add2cal',
     install_requires=[
