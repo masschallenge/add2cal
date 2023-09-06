@@ -131,6 +131,7 @@ class Add2Cal():
         e.end = self.end_datetime
         c.events.add(e)
         ics_str = str(c)
+        print('********', ics_str)
         import pdb; pdb.set_trace()
         ics_str = re.sub(r'DTSTAMP\:(\d+)T(\d+)Z',
                          r'DTSTAMP:\1T\2' % self.timezone, ics_str)
@@ -141,6 +142,7 @@ class Add2Cal():
         return ics_str
 
     def as_dict(self, *args, **kwargs):
+        print('******** we reach')
         return {
             'outlook_link': self.outlook_calendar_url(),
             'gcal_link': self.google_calendar_url(),
