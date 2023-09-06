@@ -131,6 +131,7 @@ class Add2Cal():
         e.end = self.end_datetime
         c.events.add(e)
         ics_str = str(c)
+        import pdb; pdb.set_trace()
         ics_str = re.sub(r'DTSTAMP\:(\d+)T(\d+)Z',
                          r'DTSTAMP:\1T\2' % self.timezone, ics_str)
         ics_str = re.sub(r'DTEND\:(\d+)T(\d+)Z',
