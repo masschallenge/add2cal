@@ -139,9 +139,8 @@ class Add2Cal():
         return ics_str
 
     def as_dict(self, *args, **kwargs):
-        print('******** we reach')
         return {
-            'outlook_link': '',
+            'outlook_link': self.outlook_calendar_url(),
             'gcal_link': self.google_calendar_url(),
             'yahoo_link': self.yahoo_calendar_url(),
             'ical_content': self.ical_content()
