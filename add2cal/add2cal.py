@@ -11,7 +11,8 @@ from urllib import parse
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
-    'outlook': 'https://outlook.office.com/owa/',
+    # 'outlook': 'https://outlook.office.com/owa/',
+    'outlook': 'https://outlook.office.com/calendar/deeplink/compose',
     'yahoo': 'http://calendar.yahoo.com'
 }
 
@@ -117,7 +118,7 @@ class Add2Cal():
             'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
-            'allday': ''
+            'allday': 'false'
         }
         params = {
             'path': '/calendar/action/compose',
