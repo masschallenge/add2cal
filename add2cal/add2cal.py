@@ -11,8 +11,7 @@ from urllib import parse
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
-    'outlook': 'https://outlook.office.com/calendar/0/deeplink/compose',
-    # 'outlook': 'https://outlook.office.com/owa/',
+    'outlook': 'https://outlook.office.com/owa/',
     'yahoo': 'http://calendar.yahoo.com'
 }
 
@@ -118,6 +117,18 @@ class Add2Cal():
             'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
+            'allday': ''
+        }
+        params = {
+            'path': '/calendar/action/compose',
+            'rru': 'addevent',
+            'startdt': '2023-09-06T10%3A00%3A00Z',
+            'enddt': '2023-09-06T10%3A00%3A00Z',
+            'subject': 'self.event_title',
+            'uid': 'self.event_uid',
+            'ctz': 'self.timezone',
+            'location': 'self.event_location',
+            'body': 'self.event_description',
             'allday': ''
         }
         return _build_url(BASE_URLS['outlook'], params)
