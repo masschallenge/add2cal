@@ -2,7 +2,7 @@ from datetime import datetime
 from hashlib import md5
 from ics import (
     Calendar,
-    DisplayAlarm,  
+    DisplayAlarm,
     Event,
 )
 import re
@@ -11,7 +11,7 @@ from urllib import parse
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
-    'outlook': 'https://outlook.office.com/calendar/deeplink/compose',
+    'outlook': 'https://outlook.office.com/owa/',
     'yahoo': 'http://calendar.yahoo.com'
 }
 
