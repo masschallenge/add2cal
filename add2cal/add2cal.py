@@ -11,7 +11,8 @@ from urllib import parse
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
-    'outlook': 'https://outlook.office.com/owa/',
+    'outlook': 'https://outlook.live.com/owa/',
+    # 'outlook': 'https://outlook.office.com/owa/',
     'yahoo': 'http://calendar.yahoo.com'
 }
 
