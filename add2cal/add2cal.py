@@ -110,7 +110,7 @@ class Add2Cal():
         start = datetime.strptime(self.start_datetime, INPUT_DATE_FORMAT)
 
         params = {
-            'path': '/calendar/action/compose',
+            # 'path': '/calendar/action/compose',
             'rru': 'addevent',
             'startdt': start.strftime(OUTLOOK_DATE_FORMAT),
             'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
@@ -119,18 +119,6 @@ class Add2Cal():
             'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
-            'allday': ''
-        }
-        params = {
-            # 'path': '/calendar/action/compose',
-            'rru': 'addevent',
-            'startdt': '2023-09-06T10%3A00%3A00Z',
-            'enddt': '2023-09-06T10%3A00%3A00Z',
-            'subject': 'self.event_title',
-            'uid': 'self.event_uid',
-            'ctz': 'self.timezone',
-            'location': 'self.event_location',
-            'body': 'self.event_description',
             'allday': ''
         }
         return _build_url(BASE_URLS['outlook'], params)
