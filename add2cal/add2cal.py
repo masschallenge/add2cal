@@ -2,7 +2,7 @@ from datetime import datetime
 from hashlib import md5
 from ics import (
     Calendar,
-    DisplayAlarm,
+    DisplayAlarm,   
     Event,
 )
 import re
@@ -12,12 +12,13 @@ from urllib import parse
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
     # 'outlook': 'https://outlook.office.com/owa/',
-    'outlook': 'https://outlook.office.com/calendar/deeplink/compose',
+    'outlook': 'https://outlook.office.com/calendar/action/compose',
     'yahoo': 'http://calendar.yahoo.com'
 }
 
 INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
-OUTLOOK_DATE_FORMAT = 'YYYY-MM-DDTHH:MM:SSZ'
+OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%S'
+# OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
 
@@ -118,10 +119,10 @@ class Add2Cal():
             'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
-            'allday': 'false'
+            'allday': ''
         }
         params = {
-            'path': '/calendar/action/compose',
+            # 'path': '/calendar/action/compose',
             'rru': 'addevent',
             'startdt': '2023-09-06T10%3A00%3A00Z',
             'enddt': '2023-09-06T10%3A00%3A00Z',
