@@ -16,7 +16,7 @@ BASE_URLS = {
 }
 
 INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
-OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%S'
+OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
 
