@@ -1,5 +1,6 @@
 from datetime import datetime
 from hashlib import md5
+import pytz
 from ics import (
     Calendar,
     DisplayAlarm,
@@ -16,7 +17,7 @@ BASE_URLS = {
 }
 
 INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
-OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
+OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%S%Z%z'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
 
@@ -109,13 +110,16 @@ class Add2Cal():
 
         params = {
             'rru': 'addevent',
-            'startdt': start.strftime(OUTLOOK_DATE_FORMAT),
-            'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
+            'startdt': start.astimezone(
+                pytz.timezone(self.timezone)).strftime(OUTLOOK_DATE_FORMAT),
+            'enddt': end.astimezone(
+                pytz.timezone(self.timezone)).strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
-            'uid': self.event_uid,
+            # 'uid': self.event_uid,
             'location': self.event_location,
             'body': self.event_description,
-            'allday': ''
+            'allday': False,
+            'path': '/calendar/action/compose'
         }
         return _build_url(BASE_URLS['outlook'], params)
 
