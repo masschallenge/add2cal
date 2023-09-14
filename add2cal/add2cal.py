@@ -17,7 +17,7 @@ BASE_URLS = {
 }
 
 INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
-OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%S'
+OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%S%z'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
 
@@ -110,10 +110,8 @@ class Add2Cal():
 
         params = {
             'rru': 'addevent',
-            'startdt': start.astimezone(
-                pytz.timezone(self.timezone)).strftime(OUTLOOK_DATE_FORMAT),
-            'enddt': end.astimezone(
-                pytz.timezone(self.timezone)).strftime(OUTLOOK_DATE_FORMAT),
+            'startdt': self.start_datetime,
+            'enddt': self.end_datetime,
             'subject': self.event_title,
             # 'uid': self.event_uid,
             'location': self.event_location,
