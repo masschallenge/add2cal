@@ -18,7 +18,7 @@ BASE_URLS = {
 
 INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
 # OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
-OUTLOOK_DATE_FORMAT = 'yyyy-mm-ddThh:mm:ss'
+OUTLOOK_DATE_FORMAT = 'yyyy-mm-ddThh:mm:ssZ'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
 
@@ -106,13 +106,13 @@ class Add2Cal():
         return _build_url(BASE_URLS['yahoo'], params)
 
     def outlook_calendar_url(self):
-        end = datetime.strptime(self.end_datetime, OUTLOOK_DATE_FORMAT)
-        start = datetime.strptime(self.start_datetime, OUTLOOK_DATE_FORMAT)
+        end = datetime.strptime(self.end_datetime, INPUT_DATE_FORMAT)
+        start = datetime.strptime(self.start_datetime, INPUT_DATE_FORMAT)
 
         params = {
             'rru': 'addevent',
-            'startdt': start,
-            'enddt': end,
+            'startdt': start.strftime(OUTLOOK_DATE_FORMAT),
+            'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
             # 'uid': self.event_uid,
             'location': self.event_location,
