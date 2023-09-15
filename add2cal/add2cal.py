@@ -1,6 +1,5 @@
 from datetime import datetime
 from hashlib import md5
-import pytz
 from ics import (
     Calendar,
     DisplayAlarm,
