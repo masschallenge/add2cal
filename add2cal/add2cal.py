@@ -69,12 +69,12 @@ class Add2Cal():
             'location': self.event_location,
             'pli': 1,
             'uid': self.event_uid,
-            'sf': 'true',
+            # 'sf': 'true',
             # 'ctz': self.timezone,
-            'output': 'xml',
-            'followup': 'https://calendar.google.com/calendar/',
-            'scc': 1,
-            'authuser': 0
+            # 'output': 'xml',
+            # 'followup': 'https://calendar.google.com/calendar/',
+            # 'scc': 1,
+            # 'authuser': 0
         }
         return _build_url(BASE_URLS['google'], params)
 
