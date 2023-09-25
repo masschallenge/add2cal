@@ -113,7 +113,6 @@ class Add2Cal():
             'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
             'uid': self.event_uid,
-            'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
             'allday': False,
