@@ -16,7 +16,7 @@ BASE_URLS = {
 }
 
 INPUT_DATE_FORMAT = "%Y%m%dT%H%M%S"
-OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%H:%M'
+OUTLOOK_DATE_FORMAT = '%Y-%m-%dT%I:%M:%SZ'
 TRIGGER_DATE_FORMAT = '%Y-%m-%dT%I:%M'
 
 
@@ -69,6 +69,12 @@ class Add2Cal():
             'location': self.event_location,
             'pli': 1,
             'uid': self.event_uid,
+            'sf': 'true',
+            'ctz': self.timezone,
+            'output': 'xml',
+            'followup': 'https://calendar.google.com/calendar/',
+            'scc': 1,
+            'authuser': 0
         }
         return _build_url(BASE_URLS['google'], params)
 
@@ -90,6 +96,7 @@ class Add2Cal():
             'uid': '',
             'title': self.event_title,
             'st': self.start_datetime,
+            'ctz': self.timezone,
             'in_loc': self.event_location,
             'dur': '{:02d}{:02d}'.format(duration_hours, duration_minutes),
             'desc': self.event_description
@@ -101,14 +108,16 @@ class Add2Cal():
         start = datetime.strptime(self.start_datetime, INPUT_DATE_FORMAT)
 
         params = {
-            'rru': 'addevent',
+            'path': '/calendar/action/compose',
             'startdt': start.strftime(OUTLOOK_DATE_FORMAT),
             'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
+            'uid': self.event_uid,
+            'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
             'allday': False,
-            'path': '/calendar/action/compose'
+            'rru': 'addevent'
         }
         return _build_url(BASE_URLS['outlook'], params)
 
@@ -132,7 +141,7 @@ class Add2Cal():
 
     def as_dict(self, *args, **kwargs):
         return {
-            'outlook_link': self.outlook_calendar_url(),
+            'outlook_link': '',
             'gcal_link': self.google_calendar_url(),
             'yahoo_link': self.yahoo_calendar_url(),
             'ical_content': self.ical_content()
