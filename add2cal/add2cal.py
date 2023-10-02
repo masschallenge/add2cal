@@ -11,7 +11,7 @@ from urllib import parse
 
 BASE_URLS = {
     'google': 'https://calendar.google.com/calendar/render',
-    'outlook': 'https://outlook.office.com/owa/',
+    'outlook': 'https://outlook.office.com/calendar/action/compose',
     'yahoo': 'http://calendar.yahoo.com'
 }
 
@@ -113,10 +113,10 @@ class Add2Cal():
             'enddt': end.strftime(OUTLOOK_DATE_FORMAT),
             'subject': self.event_title,
             'uid': self.event_uid,
-            'ctz': self.timezone,
             'location': self.event_location,
             'body': self.event_description,
-            'allday': ''
+            'allday': False,
+            'rru': 'addevent'
         }
         return _build_url(BASE_URLS['outlook'], params)
 
@@ -140,7 +140,7 @@ class Add2Cal():
 
     def as_dict(self, *args, **kwargs):
         return {
-            'outlook_link': '',
+            'outlook_link': self.outlook_calendar_url(),
             'gcal_link': self.google_calendar_url(),
             'yahoo_link': self.yahoo_calendar_url(),
             'ical_content': self.ical_content()
